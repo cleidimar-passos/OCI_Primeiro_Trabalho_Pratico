@@ -1,0 +1,5 @@
+add x2, x0, x1
+addi x3, x2, -432
+sub x3, x6, x2
+lb a0, 8(a2)
+beq x3, x4, 19
