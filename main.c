@@ -6,6 +6,9 @@
 /**
  * INSTRUÇÕES DO MEU GRUPO:
  * | lb | sb | sub | and | ori | srl | beq |
+ *
+ * INSTRUÇÕES RESTANTES:
+ * | sb | and | ori |
 */
 enum {
     OPCODE = 0,
@@ -227,6 +230,14 @@ int main() {
             strcpy(binario_B[3], "000");
             reg_em_binario_B(&vetInstruLinha[a], binario_B, 4, im_convertido);
             printa_binario_B(binario_B);
+        }
+
+        if (!strcmp(vetInstruLinha[a], "srl")) {
+            strcpy(binario_R[OPCODE], "0110011");
+            strcpy(binario_R[FUNCT3], "101");
+            strcpy(binario_R[FUNCT7], "0000000");
+            reg_em_binario(&vetInstruLinha[a], binario_R, 4);
+            printa_binario_R(binario_R);
         }
     }
     return 0;
