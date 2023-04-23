@@ -215,6 +215,12 @@ int main() {
             reg_em_binario_I_paren(&vetInstruLinha[a], binario_I, 4, im_convertido);
             printa_binario_I(binario_I);
         }
+        if (!strcmp(vetInstruLinha[a], "sb")) {
+            strcpy(binario_I[OPCODE], "0100011");
+            strcpy(binario_I[FUNCT3], "000");
+            reg_em_binario_I_paren(&vetInstruLinha[a], binario_I, 4, im_convertido);
+            printa_binario_I(binario_I);
+        }
 
         if (!strcmp(vetInstruLinha[a], "beq")) {
             strcpy(binario_B[OPCODE], "1100111");
