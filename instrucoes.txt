@@ -1,7 +1,7 @@
+sb x12, 4(x11) 
 add x2, x0, x1
 addi x3, x2, -432
 sub x3, x6, x2
 lb a0, 8(a2)
-sb x12, 0(x11)
 beq x3, x4, 19
 srl x0, x2, x2

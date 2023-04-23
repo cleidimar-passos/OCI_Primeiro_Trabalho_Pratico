@@ -17,7 +17,7 @@ enum {
 };
 
 
-
+void reg_em_binario_S_paren(char vet[50][50],char vetBin[6][100], int t, char* convertidoBin);
 
 void separa_imm_B(char* convertidoBin, char im_separado_tipo_B[4][100]);
 void reg_em_binario_B(char vet[50][50],char vetBin[8][100], int t, char* convertidoBin);
@@ -102,7 +102,45 @@ void reg_em_binario_I_paren(char vet[50][50],char vetBin[6][100], int t, char* c
         }
     }
 }
+void reg_em_binario_S_paren(char vet[50][50],char vetBin[6][100], int t, char* convertidoBin){
+    char* registradores[] = {"x0", "x1", "x2", "x3", "x4", "x5", "x6","x7","x8","x9","x10","x11","x12","x13","x14","x15","x16","x17","x18","x19","x20","x21","x22","x23","x24","x25","x26","x27","x28","x29","x30","x31"};
+    char* apelido[] = {"zero", "ra", "sp", "gp", "tp", "t0", "t1", "t2", "s0", "s1","a0", "a1", "a2", "a3", "a4", "a5", "a6", "a7", "s2", "s3","s4", "s5", "s6", "s7", "s8", "s9", "s10", "s11", "t3","t4", "t5", "t6"};
+    char* registradores_em_binario[] = {"00000", "00001", "00010", "00011", "00100", "00101", "00110", "00111", "01000", "01001", "01010", "01011", "01100", "01101", "01110", "01111", "10000", "10001", "10010", "10011", "10100", "10101", "10110", "10111", "11000", "11001", "11010", "11011", "11100", "11101", "11110", "11111"};
+    char* immpt1 = (char*)calloc(5,sizeof(char)); 
+    char* immpt2 = (char*)calloc(7,sizeof(char));
+    int cnt,cnf;
+    for (int i = 0; i < t; i++) {
+        for (int j = 0; j < 32; j++) {
+            if (!strcmp(vet[i], registradores[j]) || !strcmp(vet[i], apelido[j])) {
+                if (i == 1) {
+                    strcpy(vetBin[4], registradores_em_binario[j]);
+                }
+                else if (i == 3) {
+                    strcpy(vetBin[3], registradores_em_binario[j]);
+                }
+            }
+            if (i == 2) {
+                immediate_to_bin(vet[2], convertidoBin);
+                //printf("\nconvertidoBin -> %s\n",convertidoBin);
 
+            }
+        }
+    }
+    //putchar('\n');
+                for(cnt = 0; cnt <7; cnt++){  
+                    immpt2[cnt]=convertidoBin[cnt];
+                       
+                }
+                cnt=0;
+                for(cnf = 7; cnf <=11; cnf++){
+                    immpt1[cnt]=convertidoBin[cnf];
+                    cnt++;
+                }
+                
+                strcpy(vetBin[1], immpt1);
+                
+                strcpy(vetBin[5], immpt2);
+}
 void reg_em_binario_I(char vet[50][50],char vetBin[6][100], int t, char* convertidoBin)
 {
     char* registradores[] = {"x0", "x1", "x2", "x3", "x4", "x5", "x6","x7","x8","x9","x10","x11","x12","x13","x14","x15","x16","x17","x18","x19","x20","x21","x22","x23","x24","x25","x26","x27","x28","x29","x30","x31"};
@@ -151,7 +189,7 @@ void reg_em_binario(char vet[50][50],char vetBin[6][100], int t)
 }
 int main() {
     FILE * instrucoesAssembly;
-    instrucoesAssembly = fopen("../instrucoes.txt", "r");
+    instrucoesAssembly = fopen("instrucoes.txt", "r");
     char linha[200];
     char * token;
     char vetInstruLinha[50][50];
@@ -189,6 +227,7 @@ int main() {
     }
 
     for (int a = 0; a < cont; a++) {
+        
         if (!strcmp(vetInstruLinha[a], "add")) {
             strcpy(binario_R[OPCODE], "0110011");
             strcpy(binario_R[FUNCT3], "000");
@@ -217,12 +256,16 @@ int main() {
             strcpy(binario_I[FUNCT3], "000");
             reg_em_binario_I_paren(&vetInstruLinha[a], binario_I, 4, im_convertido);
             printa_binario_I(binario_I);
+            
         }
         if (!strcmp(vetInstruLinha[a], "sb")) {
-            strcpy(binario_I[OPCODE], "0100011");
-            strcpy(binario_I[FUNCT3], "000");
-            reg_em_binario_I_paren(&vetInstruLinha[a], binario_I, 4, im_convertido);
-            printa_binario_I(binario_I);
+            strcpy(binario_R[OPCODE], "0100011");
+            strcpy(binario_R[FUNCT3], "000");
+            //printf("\nvetInstruLinha = %s\n ",linha);
+            //printf("\nvetInstruLinha = %s %s %s %s\n",vetInstruLinha[a],vetInstruLinha[a+1], vetInstruLinha[a+2],vetInstruLinha[a+3]);
+            reg_em_binario_S_paren(&vetInstruLinha[a], binario_R, 4, im_convertido);
+            //printf("\nop = %s\nim1 = %s\nf3 = %s\nrs1 = %s\nrs2 = %s\nim2 = %s size %d\n",binario_R[0],binario_R[1],binario_R[2],binario_R[3],binario_R[4],binario_R[5]);
+            printa_binario_R(binario_R);
         }
 
         if (!strcmp(vetInstruLinha[a], "beq")) {
